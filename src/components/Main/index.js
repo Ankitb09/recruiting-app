@@ -75,7 +75,7 @@ const Main = () => {
   };
 
   const handleSearch = debounce((query) => {
-    setSearchText(query);
+    dispatch({ type: "LIST_FILTER", searchQuery: query });
 
     // adding search query params to URL
     const currentParams = Object.fromEntries([...searchParams]);

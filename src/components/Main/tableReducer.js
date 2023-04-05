@@ -1,4 +1,4 @@
-import { sortBy } from "../../utils";
+import { sortBy, filter } from "../../utils";
 
 export const tableReducer = (state, action) => {
   switch (action.type) {
@@ -16,6 +16,20 @@ export const tableReducer = (state, action) => {
         sorting: {
           sortByKey: action.key,
           sortingDirection: action.direction,
+        },
+      };
+
+    case "LIST_FILTER":
+      const filteredData = filter(state.data, action.searchQuery, [
+        "name",
+        "position_applied",
+        "status",
+      ]);
+      return {
+        ...state,
+        data: filteredData,
+        filter: {
+          searchQuery: action.searchQuery,
         },
       };
 
