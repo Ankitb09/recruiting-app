@@ -12,6 +12,11 @@ export const TableHeader = styled.div`
 
 export const Th = styled.div`
   padding: 5px;
+  display: flex;
+`;
+
+const InputWrapper = styled.div`
+  padding: 5px;
   ${({ isArrowVisible }) =>
     isArrowVisible &&
     css`

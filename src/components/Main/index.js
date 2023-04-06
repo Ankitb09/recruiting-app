@@ -2,7 +2,6 @@ import React, { useEffect, useState, useReducer } from "react";
 import { useSearchParams } from "react-router-dom";
 import * as S from "./styles";
 import Table from "../Table";
-import Input from "../Input";
 import { debounce, removeEmptyKeys } from "../../utils";
 import { tableReducer } from "./tableReducer";
 import { Headings } from "./config";
@@ -74,7 +73,8 @@ const Main = () => {
     }
   };
 
-  const handleSearch = debounce((query) => {
+  const handleSearch = debounce((query, key) => {
+    console.log(query, key);
     dispatch({ type: "LIST_FILTER", searchQuery: query });
 
     // adding search query params to URL
@@ -88,13 +88,13 @@ const Main = () => {
 
   return (
     <S.Container>
-      <Input changeHandlerFn={handleSearch} />
       <Table
         sorting={candidatesData.sorting}
         sortingFn={handleSorting}
+        filterFn={handleSearch}
         headings={Headings}
         isLoading={showLoader}
-        candidates={candidatesData.data}
+        rows={candidatesData.data}
       />
     </S.Container>
   );
