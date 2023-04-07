@@ -11,15 +11,20 @@ export const BASE_PATH = "https://personio-fe-coding-challenge.vercel.app/api/";
 
 const initialState = {
   data: [],
+  filteredData: [],
   error: false,
-  sorting: {
-    sortByKey: "",
-    sortingDirection: "",
-  },
-  filter: {
-    searchQuery: "",
-    filterBy: "",
-  },
+  /**
+   * 
+   * name: "",
+    status: "",
+    position: "",
+  */
+  filterBy: {},
+  /**
+   *
+   * position_applied: "desc",
+   */
+  sortBy: {},
 };
 
 const Main = () => {
@@ -53,7 +58,6 @@ const Main = () => {
   useEffect(() => {
     const currentParams = Object.fromEntries([...searchParams]);
     let filteredObj = removeEmptyKeys(currentParams);
-
     setSearchParams(filteredObj);
   }, [searchParams]);
 
@@ -73,13 +77,15 @@ const Main = () => {
     }
   };
 
-  const handleSearch = debounce((query, key) => {
-    console.log(query, key);
-    dispatch({ type: "LIST_FILTER", searchQuery: query });
+  const handleSearch = debounce((key, query) => {
+    console.log({ [key]: query });
+    dispatch({ type: "LIST_FILTER_SORT", key, query });
 
     // adding search query params to URL
+    let obj = {};
+    obj["filterBy" + key] = query; // adding "filterBy" to the added query params, to easily differentiate b/w filter and sort query params
     const currentParams = Object.fromEntries([...searchParams]);
-    setSearchParams({ ...currentParams, query });
+    setSearchParams({ ...currentParams, ...obj });
   });
 
   if (candidatesData.error) {
@@ -89,7 +95,7 @@ const Main = () => {
   return (
     <S.Container>
       <Table
-        sorting={candidatesData.sorting}
+        sortBy={candidatesData.sortBy}
         sortingFn={handleSorting}
         filterFn={handleSearch}
         headings={Headings}

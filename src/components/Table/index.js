@@ -4,36 +4,41 @@ import Input from "../Input";
 import TableRow from "../TableRow";
 import * as S from "./styles";
 
-const Table = ({ sorting, sortingFn, filterFn, headings, isLoading, rows }) => {
+const Table = ({ sortBy, sortingFn, filterFn, headings, isLoading, rows }) => {
   return (
     <S.TableContainer>
       <S.TableHeader>
-        {headings.map((item) => (
-          <>
-            <S.Th isArrowVisible={item.sortable} key={item.key}>
-              {item.label}
-              {item.sortable && !isLoading && (
-                <SortingIcons
-                  sortingDirection={sorting.sortingDirection}
-                  isCurrentSorted={item.key === sorting.sortByKey}
-                  handleUpClick={() => {
-                    sortingFn(item.key, "asc");
-                  }}
-                  handleDownClick={() => {
-                    sortingFn(item.key, "desc");
-                  }}
-                />
-              )}
-              {item.filterable && !isLoading && (
-                <Input
-                  changeHandlerFn={(val) => {
-                    filterFn(item.key, val);
-                  }}
-                />
-              )}
-            </S.Th>
-          </>
-        ))}
+        {headings.map((item) => {
+          const { label, key, sortable, filterable } = item;
+          return (
+            <>
+              <S.Th isArrowVisible={sortable} key={key}>
+                {label}
+                {sortable && !isLoading && (
+                  <SortingIcons
+                    sortingDirection={sortBy[key]}
+                    isCurrentSorted={key === Object.keys(sortBy)[0]}
+                    handleUpClick={() => {
+                      sortingFn(key, "asc");
+                    }}
+                    handleDownClick={() => {
+                      sortingFn(key, "desc");
+                    }}
+                  />
+                )}
+                {filterable && !isLoading && (
+                  <S.InputWrapper>
+                    <Input
+                      changeHandlerFn={(val) => {
+                        filterFn(key, val);
+                      }}
+                    />
+                  </S.InputWrapper>
+                )}
+              </S.Th>
+            </>
+          );
+        })}
       </S.TableHeader>
 
       {isLoading

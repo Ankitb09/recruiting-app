@@ -15,11 +15,6 @@ export const Th = styled.div`
   display: flex;
 `;
 
-const InputWrapper = styled.div`
-  padding: 5px;
-  ${({ isArrowVisible }) =>
-    isArrowVisible &&
-    css`
-      display: flex;
-    `}
+export const InputWrapper = styled.div`
+  flex: 0 0 100%;
 `;
